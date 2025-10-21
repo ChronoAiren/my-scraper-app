@@ -11,23 +11,23 @@ export async function scrapeBBCNews(pages = 1, baseUrl = 'https://www.bbc.com/ne
       const response = await axios.get(url);
       const $ = cheerio.load(response.data);
 
-      // Note: This selector is specific to BBC. For other sites, the scraping logic would need adjustment.
-      $('.gs-c-promo').each((index, element) => {
+      // Updated selectors for current BBC News structure
+      $('.nw-c-promo').each((index, element) => {
         const story = $(element);
 
         // Get the headline
-        const headlineElement = story.find('a.gs-c-promo-heading h3');
+        const headlineElement = story.find('h3');
         const headline = headlineElement.text().trim();
 
         // Get the URL
-        const relativeUrl = story.find('a.gs-c-promo-heading').attr('href');
+        const relativeUrl = story.find('a.nw-o-link-split__anchor').attr('href');
         const fullUrl = relativeUrl ? `${baseUrl}${relativeUrl}` : '';
 
         // Get the summary
-        const summary = story.find('p.gs-c-promo-summary').text().trim();
+        const summary = story.find('p.nw-c-promo-summary').text().trim();
 
         // Get the date
-        const date = story.find('time.gs-o-bullet__text').text().trim();
+        const date = story.find('time.nw-c-timestamp').text().trim();
 
         if (headline) {
           headlines.push({
