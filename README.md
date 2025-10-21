@@ -1,12 +1,12 @@
 # Fetch and Show Latest News Headlines
 
-A production-level React application that scrapes and displays the latest headlines from BBC News. The scraper fetches headlines, handles pagination, and saves results to a CSV file with robust error handling and modern UI.
+A production-level React application that scrapes and displays the latest headlines from any news website. Users can input a custom URL (BBC as default) and specify the number of pages to scrape, with robust error handling and modern UI.
 
 ## Project Structure
 
-- `scraper.js`: Node.js script to scrape BBC News headlines using Axios and Cheerio.
+- `scraper.js`: Node.js script to scrape news headlines using Axios and Cheerio.
 - `server.js`: Express server to provide API endpoints for the React app.
-- `src/App.jsx`: React component to display headlines with loading states and error handling.
+- `src/App.jsx`: React component to display headlines with loading states, error handling, and user inputs.
 - `headlines.csv`: Output CSV file (generated after running the scraper).
 
 ## Libraries Used
@@ -48,7 +48,7 @@ All libraries are npm installable:
    ```
    The app will be available at `http://localhost:5173`.
 
-3. **Fetch headlines**: Click the "Fetch Headlines" button in the React app to retrieve and display the latest headlines.
+3. **Fetch headlines**: Enter a news site URL (default: BBC News), specify pages, and click "Fetch Headlines".
 
 ## Running the Scraper Directly
 
@@ -56,15 +56,13 @@ To run the scraper as a standalone script and save to CSV:
 ```
 npm run scrape
 ```
-This will fetch headlines from up to 3 pages, display them in the console, and save to `headlines.csv`.
+This will fetch headlines from the default site (BBC) for 3 pages.
 
-## Chosen News Site
+## Custom Scraping
 
-- **BBC News** (`https://www.bbc.com/news`): Selected for its structured HTML. The scraper targets elements with classes like `gs-c-promo` for story containers, `gs-c-promo-heading` for headlines, and `gs-o-bullet__text` for dates. Handles pagination for multiple pages.
-
-## Pagination Handling
-
-The scraper supports fetching multiple pages (default: 3 pages) to gather more headlines efficiently.
+- **Default Site**: BBC News (`https://www.bbc.com/news`).
+- **User Input**: Enter any news site URL in the app. Note: The scraper is optimized for BBC's HTML structure; other sites may require code adjustments for accurate extraction.
+- **Pagination**: Specify the number of pages to scrape (default: 1).
 
 ## Output Format
 
@@ -78,12 +76,14 @@ The scraper supports fetching multiple pages (default: 3 pages) to gather more h
 - **Environment Variables**: Configurable API URL via `.env`.
 - **Responsive UI**: Modern card-based layout with hover effects.
 - **Accessibility**: Proper semantic HTML and ARIA attributes.
+- **Flexibility**: User can input custom URLs for different news sites.
 
 ## Notes
 
-- Ensure the BBC News website structure hasn't changed, as scraping is dependent on HTML classes.
+- The scraper is designed for BBC News but allows custom URLs. For other sites, HTML selectors may need updating in `scraper.js`.
+- Ensure the target website allows scraping and complies with robots.txt.
 - The scraper does not use browser automation; it relies on HTTP requests and HTML parsing.
-- For production, consider adding rate limiting, caching, and compliance with the site's robots.txt.
+- For production, consider adding rate limiting, caching, and compliance with site terms.
 
 ## Contributing
 

@@ -2,16 +2,16 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { createObjectCsvWriter } from 'csv-writer';
 
-// Function to scrape BBC News headlines
-export async function scrapeBBCNews(pages = 1) {
+// Function to scrape news headlines from a given URL
+export async function scrapeBBCNews(pages = 1, baseUrl = 'https://www.bbc.com/news') {
   const headlines = [];
   for (let page = 1; page <= pages; page++) {
-    const url = page === 1 ? 'https://www.bbc.com/news' : `https://www.bbc.com/news/${page}`;
+    const url = page === 1 ? baseUrl : `${baseUrl}/${page}`;
     try {
       const response = await axios.get(url);
       const $ = cheerio.load(response.data);
 
-      // Select each story container
+      // Note: This selector is specific to BBC. For other sites, the scraping logic would need adjustment.
       $('.gs-c-promo').each((index, element) => {
         const story = $(element);
 
@@ -20,8 +20,8 @@ export async function scrapeBBCNews(pages = 1) {
         const headline = headlineElement.text().trim();
 
         // Get the URL
-        const url = story.find('a.gs-c-promo-heading').attr('href');
-        const fullUrl = url ? `https://www.bbc.com${url}` : '';
+        const relativeUrl = story.find('a.gs-c-promo-heading').attr('href');
+        const fullUrl = relativeUrl ? `${baseUrl}${relativeUrl}` : '';
 
         // Get the summary
         const summary = story.find('p.gs-c-promo-summary').text().trim();
@@ -40,7 +40,7 @@ export async function scrapeBBCNews(pages = 1) {
         }
       });
     } catch (error) {
-      console.error(`Error fetching page ${page}:`, error);
+      console.error(`Error fetching page ${page} from ${baseUrl}:`, error);
       // Continue to next page if one fails
     }
   }
